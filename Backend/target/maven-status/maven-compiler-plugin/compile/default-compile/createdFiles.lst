@@ -1,0 +1,5 @@
+com\eventspark\calculator\model\CalculationResponse.class
+com\eventspark\calculator\service\CalculatorService.class
+com\eventspark\calculator\controller\CalculatorController.class
+com\eventspark\calculator\CalculatorApplication.class
+com\eventspark\calculator\model\CalculationRequest.class
