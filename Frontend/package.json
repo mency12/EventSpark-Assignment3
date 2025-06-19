@@ -16,7 +16,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "note": "Make sure to set REACT_APP_API_URL in a .env file to https://eventsparkbackend-env.eba-vpinepii.us-east-1.elasticbeanstalk.com"
   },
   "eslintConfig": {
     "extends": [
