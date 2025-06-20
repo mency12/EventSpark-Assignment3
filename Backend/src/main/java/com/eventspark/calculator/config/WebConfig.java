@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(
                     "https://event-spark-self.vercel.app",
-                    "https://event-spark-prod.vercel.app"
+                    "https://event-spark-prod.vercel.app",
                     "http://localhost:3000"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
