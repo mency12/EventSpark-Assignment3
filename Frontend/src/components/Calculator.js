@@ -12,7 +12,7 @@ const Calculator = () => {
 
   // Get API URL from environment variable or use default
   const API_BASE_URL =
-    process.env.REACT_APP_BACKEND_URL || "http://localhost:8080";
+    process.env.REACT_APP_API_URL|| "http://localhost:8080";
 
   const operations = [
     { symbol: "+", name: "add" },
