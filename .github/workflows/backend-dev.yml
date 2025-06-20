@@ -45,5 +45,5 @@ jobs:
     if: github.ref == 'refs/heads/dev'
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to AWS Elastic Beanstalk (handled outside GitHub Actions)
-        run: echo "Deployment is handled by AWS Elastic Beanstalk. No action needed here."
+      - name: Deploy to Render (handled by Render's auto-deploy)
+        run: echo "Deployment is handled by Render's auto-deploy feature. No action needed here."
