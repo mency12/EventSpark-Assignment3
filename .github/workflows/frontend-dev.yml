@@ -1,4 +1,4 @@
-name: Frontend Dev Deployment
+git puname: Frontend Dev Deployment
 
 on:
   push:
