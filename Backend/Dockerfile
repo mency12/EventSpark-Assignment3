@@ -1,12 +1,28 @@
-# Use Maven to build the app
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+# Use OpenJDK 17 as base image
+FROM openjdk:17-jdk-slim
 
-# Use a lightweight JRE to run the app
-FROM eclipse-temurin:17-jre
+# Set working directory
 WORKDIR /app
-COPY --from=build /app/target/calculator-backend-0.0.1-SNAPSHOT.jar app.jar
+
+# Copy Maven wrapper and pom.xml
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+
+# Make mvnw executable
+RUN chmod +x mvnw
+
+# Download dependencies
+RUN ./mvnw dependency:go-offline -B
+
+# Copy source code
+COPY src src
+
+# Build the application
+RUN ./mvnw clean package -DskipTests
+
+# Expose port 8080
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"] 
+
+# Run the application
+CMD ["java", "-jar", "target/calculator-backend-0.0.1-SNAPSHOT.jar"] 

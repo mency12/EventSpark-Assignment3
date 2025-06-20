@@ -1,12 +1,12 @@
-name: Backend Dev Deployment
+name: Backend Prod Deployment
 
 on:
   push:
-    branches: [dev]
+    branches: [main]
     paths:
       - "Backend/**"
   pull_request:
-    branches: [dev]
+    branches: [main]
     paths:
       - "Backend/**"
 
@@ -39,11 +39,11 @@ jobs:
         working-directory: ./Backend
         run: mvn clean package -DskipTests
 
-  deploy-backend-dev:
+  deploy-backend-prod:
     needs: test-backend
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy to AWS Elastic Beanstalk (handled outside GitHub Actions)
-        run: echo "Deployment is handled by AWS Elastic Beanstalk. No action needed here."
+      - name: Deploy to Render (handled by Render's auto-deploy)
+        run: echo "Deployment is handled by Render's auto-deploy feature. No action needed here."

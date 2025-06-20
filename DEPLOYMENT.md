@@ -1,273 +1,261 @@
-# Deployment Guide - EventSpark Calculator
+# EventSpark Deployment Guide
 
-This guide explains how to set up CI/CD for the EventSpark Calculator project with GitHub Actions, deploying to Render (Backend) and Vercel (Frontend).
+This guide covers deploying the EventSpark application with a Spring Boot backend on Render and a React frontend on Vercel.
 
-## Branch Strategy
+## Architecture Overview
 
-- **`dev` branch**: Development environment
-- **`main` branch**: Production environment
+- **Backend**: Spring Boot application deployed on Render
+- **Frontend**: React application deployed on Vercel
+- **CI/CD**: GitHub Actions for testing, Render and Vercel handle deployments
 
-## Prerequisites
+## Backend Deployment (Render)
 
-1. **GitHub Repository**: Push your code to GitHub
-2. **Render Account**: For backend deployment
-3. **Vercel Account**: For frontend deployment
-4. **GitHub Secrets**: Configure the required secrets
+### Prerequisites
 
-## Setup Instructions
+- Render account
+- GitHub repository connected to Render
 
-### 1. GitHub Repository Setup
+### Deployment Steps
 
-1. Create a new repository on GitHub
-2. Push your code to the repository
-3. Create two branches: `dev` and `main`
+1. **Create a new Web Service on Render**
 
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/eventspark-calculator.git
-git push -u origin main
-git checkout -b dev
-git push -u origin dev
+   - Go to [Render Dashboard](https://dashboard.render.com/)
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+
+2. **Configure the Web Service**
+
+   - **Name**: `eventspark-backend`
+   - **Environment**: `Java`
+   - **Build Command**: `mvn clean package -DskipTests`
+   - **Start Command**: `java -jar target/calculator-backend-0.0.1-SNAPSHOT.jar`
+   - **Health Check Path**: `/api/health`
+
+3. **Environment Variables**
+
+   - `JAVA_VERSION`: `17`
+
+4. **Auto-Deploy Settings**
+   - Enable auto-deploy for the `main` branch
+   - Enable auto-deploy for the `dev` branch (if you want separate dev environment)
+
+### Render Configuration
+
+The `render.yaml` file in the Backend directory contains the service configuration:
+
+```yaml
+services:
+  - type: web
+    name: eventspark-backend
+    env: java
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/calculator-backend-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: JAVA_VERSION
+        value: 17
+    healthCheckPath: /api/health
+    autoDeploy: true
 ```
 
-### 2. Render Setup (Backend)
+### Backend URL
 
-#### Create Render Services
+After deployment, your backend will be available at:
 
-1. Go to [Render Dashboard](https://dashboard.render.com/)
-2. Create two web services for your backend:
-   - **Development Service**: `eventspark-calculator-backend-dev`
-   - **Production Service**: `eventspark-calculator-backend-prod`
+- Production: `https://your-app-name.onrender.com`
+- Development: `https://your-dev-app-name.onrender.com`
 
-#### Development Service Configuration:
+## Frontend Deployment (Vercel)
 
-- **Name**: `eventspark-calculator-backend-dev`
-- **Environment**: `Java`
-- **Build Command**: `mvn clean package -DskipTests`
-- **Start Command**: `java -jar target/calculator-backend-0.0.1-SNAPSHOT.jar`
-- **Branch**: `dev`
+### Prerequisites
 
-#### Production Service Configuration:
+- Vercel account
+- GitHub repository connected to Vercel
 
-- **Name**: `eventspark-calculator-backend-prod`
-- **Environment**: `Java`
-- **Build Command**: `mvn clean package -DskipTests`
-- **Start Command**: `java -jar target/calculator-backend-0.0.1-SNAPSHOT.jar`
-- **Branch**: `main`
+### Deployment Steps
 
-### 3. Vercel Setup (Frontend)
+1. **Import Project to Vercel**
 
-#### Create Vercel Projects
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "New Project"
+   - Import your GitHub repository
 
-1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
-2. Create two projects for your frontend:
-   - **Development Project**: `eventspark-calculator-frontend-dev`
-   - **Production Project**: `eventspark-calculator-frontend-prod`
+2. **Configure Build Settings**
 
-#### Development Project Configuration:
+   - **Framework Preset**: `Create React App`
+   - **Root Directory**: `Frontend`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `build`
 
-- **Framework Preset**: `Create React App`
-- **Root Directory**: `Frontend`
-- **Build Command**: `npm run build`
-- **Output Directory**: `build`
-- **Branch**: `dev`
+3. **Environment Variables**
 
-#### Production Project Configuration:
+   - `REACT_APP_BACKEND_URL`: Your Render backend URL (e.g., `https://your-app-name.onrender.com`)
 
-- **Framework Preset**: `Create React App`
-- **Root Directory**: `Frontend`
-- **Build Command**: `npm run build`
-- **Output Directory**: `build`
-- **Branch**: `main`
+4. **Deployment Settings**
+   - Enable auto-deploy for the `main` branch
+   - Enable auto-deploy for the `dev` branch (if you want separate dev environment)
 
-### 4. GitHub Secrets Configuration
+### Vercel Configuration
 
-Go to your GitHub repository → Settings → Secrets and variables → Actions, and add the following secrets:
+The `vercel.json` file in the Frontend directory contains the deployment configuration:
 
-#### Required Secrets:
-
-```
-RENDER_API_KEY=your_render_api_key
-RENDER_SERVICE_ID_DEV=your_dev_service_id
-RENDER_SERVICE_ID_PROD=your_prod_service_id
-VERCEL_TOKEN=your_vercel_token
-VERCEL_ORG_ID=your_vercel_org_id
-VERCEL_PROJECT_ID_DEV=your_dev_project_id
-VERCEL_PROJECT_ID_PROD=your_prod_project_id
-```
-
-#### How to get these values:
-
-**Render API Key:**
-
-1. Go to Render Dashboard → Account Settings → API Keys
-2. Create a new API key
-
-**Render Service IDs:**
-
-1. Go to your Render service
-2. Copy the Service ID from the URL or service settings
-
-**Vercel Token:**
-
-1. Go to Vercel Dashboard → Settings → Tokens
-2. Create a new token
-
-**Vercel Org ID:**
-
-1. Go to Vercel Dashboard → Settings
-2. Copy the Team ID
-
-**Vercel Project IDs:**
-
-1. Go to your Vercel project
-2. Copy the Project ID from the project settings
-
-### 5. Environment Variables
-
-#### Frontend Environment Variables
-
-Create environment files in the Frontend directory:
-
-**For Development (.env.development):**
-
-```
-REACT_APP_API_URL=https://your-dev-backend.onrender.com
-REACT_APP_ENV=development
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_BACKEND_URL": "@backend_url"
+  }
+}
 ```
 
-**For Production (.env.production):**
+### Frontend URL
 
-```
-REACT_APP_API_URL=https://your-prod-backend.onrender.com
-REACT_APP_ENV=production
-```
+After deployment, your frontend will be available at:
 
-#### Vercel Environment Variables
+- Production: `https://your-app-name.vercel.app`
+- Development: `https://your-dev-app-name.vercel.app`
 
-Set these in your Vercel project settings:
+## CI/CD Pipeline
 
-**Development Project:**
+### GitHub Actions Workflows
 
-- `REACT_APP_API_URL`: `https://your-dev-backend.onrender.com`
-- `REACT_APP_ENV`: `development`
+The project includes four GitHub Actions workflows:
 
-**Production Project:**
+1. **backend-dev.yml**: Tests backend on dev branch pushes
+2. **backend-prod.yml**: Tests backend on main branch pushes
+3. **frontend-dev.yml**: Tests frontend on dev branch pushes
+4. **frontend-prod.yml**: Tests frontend on main branch pushes
 
-- `REACT_APP_API_URL`: `https://your-prod-backend.onrender.com`
-- `REACT_APP_ENV`: `production`
+### Workflow Features
 
-### 6. CORS Configuration
+- **Testing**: Runs unit tests for both backend and frontend
+- **Building**: Builds the applications to ensure they compile correctly
+- **Deployment**: Render and Vercel handle deployments automatically based on branch pushes
 
-Update the backend CORS configuration to allow requests from your Vercel domains:
+## Environment Setup
 
-```java
-@CrossOrigin(origins = {
-    "http://localhost:3000",
-    "https://your-dev-frontend.vercel.app",
-    "https://your-prod-frontend.vercel.app"
-})
-```
+### Development Environment
 
-## Workflow Overview
+1. **Backend**: Runs on `http://localhost:8080`
+2. **Frontend**: Runs on `http://localhost:3000`
+3. **CORS**: Configured to allow localhost connections
 
-### Development Workflow:
+### Production Environment
 
-1. Push changes to `dev` branch
-2. GitHub Actions triggers:
-   - Backend tests and deployment to Render (dev)
-   - Frontend tests and deployment to Vercel (dev)
+1. **Backend**: HTTPS endpoint on Render
+2. **Frontend**: HTTPS endpoint on Vercel
+3. **CORS**: Configured to allow Vercel and Render domains
 
-### Production Workflow:
+## Environment Variables
 
-1. Merge `dev` into `main` branch
-2. GitHub Actions triggers:
-   - Backend tests and deployment to Render (prod)
-   - Frontend tests and deployment to Vercel (prod)
+### Frontend Environment Variables
 
-## Testing the Setup
+Create a `.env` file in the Frontend directory:
 
-### 1. Test Development Deployment:
-
-```bash
-git checkout dev
-# Make changes to Backend or Frontend
-git add .
-git commit -m "Test dev deployment"
-git push origin dev
+```env
+REACT_APP_BACKEND_URL=http://localhost:8080
 ```
 
-### 2. Test Production Deployment:
+For production, set this in Vercel's environment variables to your Render backend URL.
 
-```bash
-git checkout main
-git merge dev
-git push origin main
-```
+### Backend Environment Variables
 
-## Monitoring
+No additional environment variables are required for basic functionality.
 
-### GitHub Actions:
+## Monitoring and Health Checks
 
-- Monitor workflow runs in the Actions tab
-- Check for any build or deployment failures
+### Backend Health Check
 
-### Render:
+- **Endpoint**: `/api/health`
+- **Response**: `"OK"`
+- **Used by**: Render for health monitoring
 
-- Monitor backend deployments in Render dashboard
-- Check logs for any runtime errors
+### Frontend Health Check
 
-### Vercel:
-
-- Monitor frontend deployments in Vercel dashboard
-- Check build logs and deployment status
+- **Endpoint**: Root path `/`
+- **Response**: React application
+- **Used by**: Vercel for health monitoring
 
 ## Troubleshooting
 
-### Common Issues:
+### Common Issues
 
-1. **Backend deployment fails:**
+1. **CORS Errors**
 
-   - Check Maven build logs
-   - Verify Java version compatibility
-   - Check Render service configuration
+   - Ensure the backend CORS configuration includes your Vercel domain
+   - Check that the frontend is using the correct backend URL
 
-2. **Frontend deployment fails:**
+2. **Build Failures**
 
-   - Check npm build logs
-   - Verify environment variables
-   - Check Vercel project configuration
+   - Check that all dependencies are properly installed
+   - Verify that the build commands are correct in Render/Vercel
 
-3. **CORS errors:**
+3. **Health Check Failures**
 
-   - Update backend CORS configuration
-   - Verify frontend API URL configuration
+   - Ensure the health check endpoint is accessible
+   - Check that the application is starting correctly
 
-4. **Environment variables not working:**
-   - Check Vercel environment variable settings
-   - Verify variable names start with `REACT_APP_`
+4. **Environment Variable Issues**
+   - Verify that environment variables are set correctly in Vercel
+   - Ensure the frontend is using the correct backend URL
+
+### Debugging Steps
+
+1. **Check Render Logs**
+
+   - Go to your Render service dashboard
+   - View the logs for any error messages
+
+2. **Check Vercel Logs**
+
+   - Go to your Vercel project dashboard
+   - View the function logs for any error messages
+
+3. **Test Locally**
+   - Run both applications locally to ensure they work
+   - Test the API endpoints manually
 
 ## Security Considerations
 
-1. **API Keys**: Never commit secrets to the repository
-2. **Environment Variables**: Use different values for dev and prod
-3. **CORS**: Only allow necessary domains
-4. **Dependencies**: Regularly update dependencies for security patches
+1. **HTTPS**: Both Render and Vercel provide HTTPS by default
+2. **CORS**: Configured to only allow specific domains
+3. **Environment Variables**: Sensitive data should be stored as environment variables
+4. **Input Validation**: Backend validates all calculator inputs
 
-## Cost Optimization
+## Cost Considerations
 
-1. **Render**: Use free tier for development, paid tier for production
-2. **Vercel**: Free tier is sufficient for most use cases
-3. **GitHub Actions**: Free tier includes 2000 minutes/month
+### Render Pricing
 
-## Support
+- **Free Tier**: 750 hours/month for web services
+- **Paid Plans**: Starting at $7/month for additional resources
 
-For issues with:
+### Vercel Pricing
 
-- **GitHub Actions**: Check GitHub documentation
-- **Render**: Contact Render support
-- **Vercel**: Contact Vercel support
-- **Project-specific**: Check the project README
+- **Free Tier**: Unlimited deployments for personal projects
+- **Pro Plan**: $20/month for team features and advanced analytics
+
+## Next Steps
+
+1. **Set up monitoring**: Configure logging and monitoring for both services
+2. **Add authentication**: Implement user authentication if needed
+3. **Database integration**: Add a database for persistent data storage
+4. **Custom domain**: Configure custom domains for both services
+5. **SSL certificates**: Both services provide SSL certificates automatically

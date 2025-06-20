@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "18"
@@ -40,30 +40,7 @@ jobs:
     needs: test-frontend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "npm"
-          cache-dependency-path: Frontend/package-lock.json
-
-      - name: Install dependencies
-        working-directory: ./Frontend
-        run: npm ci
-
-      - name: Build frontend
-        working-directory: ./Frontend
-        run: npm run build
-
-      - name: Deploy to Vercel (Dev)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_DEV }}
-          working-directory: ./Frontend
-          vercel-args: "--prod"
+      - name: Deploy to Vercel (handled by Vercel's auto-deploy)
+        run: echo "Deployment is handled by Vercel's auto-deploy feature. No action needed here."

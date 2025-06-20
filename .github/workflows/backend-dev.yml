@@ -43,10 +43,7 @@ jobs:
     needs: test-backend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
-
     steps:
-      - name: Deploy to Render (Dev)
-        uses: johnbeynon/render-deploy-action@v1.0.0
-        with:
-          service-id: ${{ secrets.RENDER_SERVICE_ID_DEV }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+      - uses: actions/checkout@v4
+      - name: Deploy to Render (handled by Render's auto-deploy)
+        run: echo "Deployment is handled by Render's auto-deploy feature. No action needed here."

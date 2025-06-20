@@ -11,7 +11,8 @@ const Calculator = () => {
   const [error, setError] = useState("");
 
   // Get API URL from environment variable or use default
-  const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+  const API_BASE_URL =
+    process.env.REACT_APP_BACKEND_URL || "https://eventspark-7vdt.onrender.com";
 
   const operations = [
     { symbol: "+", name: "add" },
