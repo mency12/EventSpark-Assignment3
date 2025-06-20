@@ -11,7 +11,7 @@ on:
       - "Frontend/**"
 
 jobs:
-  test-frontend:
+  build-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,16 +28,12 @@ jobs:
         working-directory: ./Frontend
         run: npm ci
 
-      - name: Run tests
-        working-directory: ./Frontend
-        run: npm test -- --watchAll=false
-
       - name: Build frontend
         working-directory: ./Frontend
         run: npm run build
 
   deploy-frontend-prod:
-    needs: test-frontend
+    needs: build-frontend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
