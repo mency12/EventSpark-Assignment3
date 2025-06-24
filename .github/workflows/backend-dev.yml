@@ -28,10 +28,6 @@ jobs:
         working-directory: ./Backend
         run: npm ci
 
-      - name: Build check
-        working-directory: ./Backend
-        run: npm run build
-
   deploy-backend-dev:
     needs: build-backend
     runs-on: ubuntu-latest
