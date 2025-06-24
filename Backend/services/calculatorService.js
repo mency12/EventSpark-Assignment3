@@ -11,6 +11,7 @@ class CalculatorService {
    * @returns {number} - Result of the calculation
    * @throws {Error} - If operation is unsupported or division by zero
    */
+
   calculate(num1, num2, operation) {
     const op = operation.toLowerCase();
 
