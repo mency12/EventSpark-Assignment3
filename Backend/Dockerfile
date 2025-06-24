@@ -1,28 +1,32 @@
-# Use OpenJDK 17 as base image
-FROM openjdk:17-jdk-slim
+# Use Node.js 18 Alpine for smaller image size
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy Maven wrapper and pom.xml
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
+# Copy package files
+COPY package*.json ./
 
-# Make mvnw executable
-RUN chmod +x mvnw
+# Install dependencies
+RUN npm ci --only=production
 
-# Download dependencies
-RUN ./mvnw dependency:go-offline -B
+# Copy application code
+COPY . .
 
-# Copy source code
-COPY src src
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Change ownership of the app directory
+RUN chown -R nodejs:nodejs /app
+USER nodejs
 
-# Expose port 8080
+# Expose port
 EXPOSE 8080
 
-# Run the application
-CMD ["java", "-jar", "target/calculator-backend-0.0.1-SNAPSHOT.jar"] 
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Start the application
+CMD ["npm", "start"] 
