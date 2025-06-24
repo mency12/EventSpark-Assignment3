@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>EventSpark Calculator dev</h1>
-        <p>A simple calculator with Spring Boot backend and React frontend</p>
+        <p>A simple calculator with Express.js backend and React frontend</p>
       </header>
       <main>
         <Calculator />

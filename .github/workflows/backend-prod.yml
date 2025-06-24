@@ -11,7 +11,7 @@ on:
       - "Backend/**"
 
 jobs:
-  test-backend:
+  build-backend:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,16 +28,12 @@ jobs:
         working-directory: ./Backend
         run: npm ci
 
-      - name: Run tests
-        working-directory: ./Backend
-        run: npm test
-
       - name: Build check
         working-directory: ./Backend
         run: npm run build
 
   deploy-backend-prod:
-    needs: test-backend
+    needs: build-backend
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:

@@ -46,7 +46,7 @@ const Calculator = () => {
         setError(err.response.data.message);
       } else {
         setError(
-          `Failed to connect to backend at ${API_BASE_URL}. Make sure the Spring Boot server is running.`
+          `Failed to connect to backend at ${API_BASE_URL}. Make sure the Express.js server is running.`
         );
       }
     } finally {
