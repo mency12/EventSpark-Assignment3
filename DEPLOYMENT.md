@@ -1,10 +1,10 @@
 # EventSpark Deployment Guide
 
-This guide covers deploying the EventSpark application with a Spring Boot backend on Render and a React frontend on Vercel.
+This guide covers deploying the EventSpark application with an Express.js backend on Render and a React frontend on Vercel.
 
 ## Architecture Overview
 
-- **Backend**: Spring Boot application deployed on Render
+- **Backend**: Express.js application deployed on Render
 - **Frontend**: React application deployed on Vercel
 - **CI/CD**: GitHub Actions for testing, Render and Vercel handle deployments
 
@@ -26,14 +26,15 @@ This guide covers deploying the EventSpark application with a Spring Boot backen
 2. **Configure the Web Service**
 
    - **Name**: `eventspark-backend`
-   - **Environment**: `Java`
-   - **Build Command**: `mvn clean package -DskipTests`
-   - **Start Command**: `java -jar target/calculator-backend-0.0.1-SNAPSHOT.jar`
+   - **Environment**: `Node`
+   - **Build Command**: `npm ci --only=production`
+   - **Start Command**: `npm start`
    - **Health Check Path**: `/api/health`
 
 3. **Environment Variables**
 
-   - `JAVA_VERSION`: `17`
+   - `NODE_ENV`: `production`
+   - `PORT`: `8080` (optional, Render will set this automatically)
 
 4. **Auto-Deploy Settings**
    - Enable auto-deploy for the `main` branch
@@ -47,12 +48,12 @@ The `render.yaml` file in the Backend directory contains the service configurati
 services:
   - type: web
     name: eventspark-backend
-    env: java
-    buildCommand: mvn clean package -DskipTests
-    startCommand: java -jar target/calculator-backend-0.0.1-SNAPSHOT.jar
+    env: node
+    buildCommand: npm ci --only=production
+    startCommand: npm start
     envVars:
-      - key: JAVA_VERSION
-        value: 17
+      - key: NODE_ENV
+        value: production
     healthCheckPath: /api/health
     autoDeploy: true
 ```
@@ -178,14 +179,15 @@ For production, set this in Vercel's environment variables to your Render backen
 
 ### Backend Environment Variables
 
-No additional environment variables are required for basic functionality.
+- `NODE_ENV`: Set to `production` for production deployments
+- `PORT`: Server port (optional, defaults to 8080)
 
 ## Monitoring and Health Checks
 
 ### Backend Health Check
 
 - **Endpoint**: `/api/health`
-- **Response**: `"OK"`
+- **Response**: `"Calculator Backend is running!"`
 - **Used by**: Render for health monitoring
 
 ### Frontend Health Check
@@ -239,6 +241,7 @@ No additional environment variables are required for basic functionality.
 2. **CORS**: Configured to only allow specific domains
 3. **Environment Variables**: Sensitive data should be stored as environment variables
 4. **Input Validation**: Backend validates all calculator inputs
+5. **Security Headers**: Helmet.js provides security headers
 
 ## Cost Considerations
 

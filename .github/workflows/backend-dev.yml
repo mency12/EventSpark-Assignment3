@@ -17,27 +17,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
         with:
-          java-version: "17"
-          distribution: "temurin"
-          cache: maven
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: Backend/package-lock.json
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Build and Test Backend
+      - name: Install dependencies
         working-directory: ./Backend
-        run: mvn clean test
+        run: npm ci
 
-      - name: Build Backend JAR
+      - name: Run tests
         working-directory: ./Backend
-        run: mvn clean package -DskipTests
+        run: npm test
+
+      - name: Build check
+        working-directory: ./Backend
+        run: npm run build
 
   deploy-backend-dev:
     needs: test-backend

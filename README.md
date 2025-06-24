@@ -1,26 +1,22 @@
 # EventSpark Calculator Project
 
-A simple calculator application demonstrating full-stack development with Spring Boot backend and React frontend, featuring complete CI/CD pipeline with GitHub Actions.
+A simple calculator application demonstrating full-stack development with Express.js backend and React frontend, featuring complete CI/CD pipeline with GitHub Actions.
 
 ## Project Structure
 
 ```
 EventSpark/
-├── Backend/                 # Spring Boot Application
-│   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/com/eventspark/calculator/
-│   │   │   │   ├── controller/
-│   │   │   │   ├── model/
-│   │   │   │   ├── service/
-│   │   │   │   └── CalculatorApplication.java
-│   │   │   └── resources/
-│   │   │       └── application.properties
-│   │   └── test/
-│   │       └── java/com/eventspark/calculator/
-│   │           └── service/
-│   │               └── CalculatorServiceTest.java
-│   ├── pom.xml
+├── Backend/                 # Express.js Application
+│   ├── services/
+│   │   └── calculatorService.js
+│   ├── routes/
+│   │   ├── calculatorRoutes.js
+│   │   └── healthRoutes.js
+│   ├── tests/
+│   │   └── calculatorService.test.js
+│   ├── server.js
+│   ├── package.json
+│   ├── Dockerfile
 │   └── render.yaml
 ├── Frontend/                # React Application
 │   ├── public/
@@ -44,13 +40,15 @@ EventSpark/
 
 ## Features
 
-- **Backend (Spring Boot)**:
+- **Backend (Express.js)**:
 
   - RESTful API endpoints for calculator operations
   - Support for addition, subtraction, multiplication, and division
   - Error handling for invalid operations (e.g., division by zero)
   - CORS configuration for frontend communication
-  - Comprehensive unit tests
+  - Comprehensive unit tests with Jest
+  - Security headers with Helmet.js
+  - Request logging with Morgan
 
 - **Frontend (React)**:
 
@@ -74,10 +72,8 @@ EventSpark/
 
 ## Prerequisites
 
-- Java 17 or higher
-- Node.js 16 or higher
-- Maven (for backend)
-- npm (for frontend)
+- Node.js 18 or higher
+- npm
 - GitHub account
 - Render account (for backend deployment)
 - Vercel account (for frontend deployment)
@@ -92,15 +88,15 @@ EventSpark/
    cd Backend
    ```
 
-2. Build the project:
+2. Install dependencies:
 
    ```bash
-   mvn clean install
+   npm install
    ```
 
-3. Run the Spring Boot application:
+3. Run the Express.js application:
    ```bash
-   mvn spring-boot:run
+   npm start
    ```
 
 The backend will start on `http://localhost:8080`
@@ -168,7 +164,7 @@ Performs mathematical calculations.
 }
 ```
 
-### GET `/api/calculator/health`
+### GET `/api/health`
 
 Health check endpoint.
 
@@ -200,7 +196,7 @@ Calculator Backend is running!
 
 ```bash
 cd Backend
-mvn test
+npm test
 ```
 
 ### Frontend Tests
@@ -221,27 +217,27 @@ The application handles various error scenarios:
 
 ## Technologies Used
 
-- **Backend**: Spring Boot 3.2.0, Java 17, Maven, JUnit 5
+- **Backend**: Express.js, Node.js 18, Jest, Helmet.js, Morgan
 - **Frontend**: React 18, Axios, CSS3, Jest, React Testing Library
 - **Communication**: RESTful API with JSON
 - **CI/CD**: GitHub Actions, Render, Vercel
-- **Testing**: JUnit 5, Jest, React Testing Library
+- **Testing**: Jest, React Testing Library
 
 ## Development
 
 To modify the calculator:
 
-- Add new operations in `CalculatorService.java`
+- Add new operations in `services/calculatorService.js`
 - Update the frontend operation buttons in `Calculator.js`
 - Modify styling in the respective CSS files
 - Add tests for new functionality
 
 ## Troubleshooting
 
-1. **Backend won't start**: Ensure Java 17+ is installed and Maven is available
+1. **Backend won't start**: Ensure Node.js 18+ is installed and run `npm install`
 2. **Frontend won't start**: Ensure Node.js 16+ is installed and run `npm install`
 3. **Connection errors**: Verify both servers are running and check CORS configuration
-4. **Port conflicts**: Change ports in `application.properties` (backend) or `package.json` (frontend)
+4. **Port conflicts**: Change ports in `server.js` (backend) or `package.json` (frontend)
 5. **CI/CD issues**: Check GitHub Actions logs and verify secrets configuration
 
 ## License
