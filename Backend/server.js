@@ -1,19 +1,31 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
-
-const calculatorService = require("./services/calculatorService");
+const mongoose = require("mongoose");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+// MongoDB Connection
+mongoose
+  .connect(
+    process.env.MONGODB_URI || "mongodb://localhost:27017/eventspark-dev",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Middleware
 app.use(helmet());
 app.use(morgan("combined"));
 app.use(express.json());
 
-// CORS configuration - same as Spring Boot WebConfig
+// CORS configuration
 const corsOptions = {
   origin: [
     "https://event-spark-self.vercel.app",
@@ -28,14 +40,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Routes
-app.use("/api/calculator", require("./routes/calculatorRoutes"));
+app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api", require("./routes/healthRoutes"));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
-    result: 0.0,
+    success: false,
     message: "An error occurred",
   });
 });
@@ -43,13 +55,13 @@ app.use((err, req, res, next) => {
 // 404 handler
 app.use("*", (req, res) => {
   res.status(404).json({
-    result: 0.0,
+    success: false,
     message: "Endpoint not found",
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Calculator Backend is running on port ${PORT}!`);
+  console.log(`EventSpark Auth Backend is running on port ${PORT}!`);
 });
 
 module.exports = app;
