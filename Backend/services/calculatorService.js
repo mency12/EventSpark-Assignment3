@@ -30,6 +30,7 @@ class CalculatorService {
           throw new Error("Cannot divide by zero");
         }
         return num1 / num2;
+        
       default:
         throw new Error(`Unsupported operation: ${operation}`);
     }
