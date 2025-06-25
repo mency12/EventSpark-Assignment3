@@ -22,7 +22,7 @@ EventSpark/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
-│   │   ├── App.js
+│   │   ├── App.jsx
 │   │   ├── App.css
 │   │   ├── index.js
 │   │   └── index.css
