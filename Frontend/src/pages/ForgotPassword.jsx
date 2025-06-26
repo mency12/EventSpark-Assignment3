@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/auth.css';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
+    const navigate = useNavigate();
 
     const [message, setMessage] = useState('');
 
@@ -18,9 +18,10 @@ const ForgotPassword = () => {
         try {
 
             await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/forgot-password`, { email });
-            setMessage('Password reset instructions have been sent to your email.');
+            setMessage('Password reset OTP has been sent to your email.');
+            navigate(`/reset-password?email=${encodeURIComponent(email)}`);
         } catch (err) {
-            setMessage(err?.response?.data?.message || 'Failed to send reset instructions. Please try again.');
+            setMessage(err?.response?.data?.message || 'Failed to send reset OTP. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -32,7 +33,7 @@ const ForgotPassword = () => {
             
                 <h2>Forgot Password</h2>
                 <p style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#666', fontSize: '0.9rem' }}>
-                    Enter your email address and we'll send you instructions to reset your password.
+                    Enter your email address and we'll send you an OTP to reset your password.
                 </p>
                 <form onSubmit={handleSubmit}>
                     <input 
@@ -56,7 +57,7 @@ const ForgotPassword = () => {
                         </div>
                     )}
                     <button className="auth-btn" type="submit" disabled={isLoading}>
-                        {isLoading ? 'Sending...' : 'Send Reset Instructions'}
+                        {isLoading ? 'Sending...' : 'Verify Email'}
                     </button>
                 </form>
                 <p className="auth-text-center" style={{ marginTop: '1rem' }}>

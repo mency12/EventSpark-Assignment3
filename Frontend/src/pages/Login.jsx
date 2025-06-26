@@ -32,7 +32,7 @@ const Login = () => {
                     <button className="auth-btn" type="submit">Sign in</button>
                 </form>
                 <p className="auth-text-center" style={{ marginTop: '1rem' }}>
-                    Don\'t have an account? <Link className="auth-link" to="/register">Sign up</Link>
+                    Don't have an account? <Link className="auth-link" to="/register">Sign up</Link>
                 </p>
             </div>
         </div>
