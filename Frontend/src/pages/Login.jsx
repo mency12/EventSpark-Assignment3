@@ -26,6 +26,9 @@ const Login = () => {
                 <form onSubmit={submitHandler}>
                     <input className="auth-input" type="email" name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
                     <input className="auth-input" type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required />
+                    <div style={{ textAlign: 'right', marginBottom: '1rem' }}>
+                        <Link className="auth-link" to="/forgot-password">Forgot Password?</Link>
+                    </div>
                     <button className="auth-btn" type="submit">Sign in</button>
                 </form>
                 <p className="auth-text-center" style={{ marginTop: '1rem' }}>
