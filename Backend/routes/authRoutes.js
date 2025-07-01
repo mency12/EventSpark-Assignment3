@@ -219,4 +219,21 @@ router.get("/profile", auth, async (req, res) => {
   }
 });
 
+// Get current user info (requires auth)
+router.get("/me", auth, async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      data: {
+        user: req.user.toJSON(),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user info",
+    });
+  }
+});
+
 module.exports = router;
