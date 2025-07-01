@@ -9,7 +9,6 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
     venue: "",
     category: "",
     totalSeats: "",
-    priceTiers: [{ name: "General", price: "", seats: "" }],
   });
 
   const [errors, setErrors] = useState({});
@@ -23,6 +22,7 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
     "Education",
     "Health",
     "Food",
+    "Others",
   ];
 
   // Pre-fill form when event data changes
@@ -36,9 +36,6 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
         venue: event.venue || "",
         category: event.category || "",
         totalSeats: event.capacity || "",
-        priceTiers: event.priceTiers || [
-          { name: "General", price: "", seats: "" },
-        ],
       });
     }
   }, [event]);
@@ -49,7 +46,6 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -58,35 +54,8 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
     }
   };
 
-  const handlePriceTierChange = (index, field, value) => {
-    const newPriceTiers = [...formData.priceTiers];
-    newPriceTiers[index][field] = value;
-    setFormData((prev) => ({
-      ...prev,
-      priceTiers: newPriceTiers,
-    }));
-  };
-
-  const addPriceTier = () => {
-    setFormData((prev) => ({
-      ...prev,
-      priceTiers: [...prev.priceTiers, { name: "", price: "", seats: "" }],
-    }));
-  };
-
-  const removePriceTier = (index) => {
-    if (formData.priceTiers.length > 1) {
-      const newPriceTiers = formData.priceTiers.filter((_, i) => i !== index);
-      setFormData((prev) => ({
-        ...prev,
-        priceTiers: newPriceTiers,
-      }));
-    }
-  };
-
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = "Event name is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
@@ -96,17 +65,6 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
     if (!formData.category) newErrors.category = "Category is required";
     if (!formData.totalSeats || formData.totalSeats <= 0)
       newErrors.totalSeats = "Total seats must be greater than 0";
-
-    // Validate price tiers
-    formData.priceTiers.forEach((tier, index) => {
-      if (!tier.name.trim())
-        newErrors[`tier${index}Name`] = "Tier name is required";
-      if (!tier.price || tier.price <= 0)
-        newErrors[`tier${index}Price`] = "Price must be greater than 0";
-      if (!tier.seats || tier.seats <= 0)
-        newErrors[`tier${index}Seats`] = "Seats must be greater than 0";
-    });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -204,11 +162,11 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              rows={3}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 errors.description ? "border-red-500" : "border-slate-300"
               }`}
               placeholder="Describe your event"
+              rows={3}
             />
             {errors.description && (
               <p className="text-red-500 text-xs mt-1">{errors.description}</p>
@@ -228,12 +186,12 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   errors.date ? "border-red-500" : "border-slate-300"
                 }`}
+                placeholder="dd-mm-yyyy"
               />
               {errors.date && (
                 <p className="text-red-500 text-xs mt-1">{errors.date}</p>
               )}
             </div>
-
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Time *
@@ -246,12 +204,12 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   errors.time ? "border-red-500" : "border-slate-300"
                 }`}
+                placeholder="--:--"
               />
               {errors.time && (
                 <p className="text-red-500 text-xs mt-1">{errors.time}</p>
               )}
             </div>
-
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Total Seats *
@@ -261,11 +219,11 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
                 name="totalSeats"
                 value={formData.totalSeats}
                 onChange={handleInputChange}
-                min="1"
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   errors.totalSeats ? "border-red-500" : "border-slate-300"
                 }`}
                 placeholder="100"
+                min={1}
               />
               {errors.totalSeats && (
                 <p className="text-red-500 text-xs mt-1">{errors.totalSeats}</p>
@@ -290,118 +248,6 @@ const EditEventModal = ({ isOpen, onClose, event, onSubmit }) => {
             {errors.venue && (
               <p className="text-red-500 text-xs mt-1">{errors.venue}</p>
             )}
-          </div>
-
-          {/* Price Tiers */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-medium text-slate-700">
-                Price Tiers
-              </label>
-              <button
-                type="button"
-                onClick={addPriceTier}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                + Add Tier
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {formData.priceTiers.map((tier, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-lg"
-                >
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Tier Name
-                    </label>
-                    <input
-                      type="text"
-                      value={tier.name}
-                      onChange={(e) =>
-                        handlePriceTierChange(index, "name", e.target.value)
-                      }
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors[`tier${index}Name`]
-                          ? "border-red-500"
-                          : "border-slate-300"
-                      }`}
-                      placeholder="e.g., VIP"
-                    />
-                    {errors[`tier${index}Name`] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[`tier${index}Name`]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Price ($)
-                    </label>
-                    <input
-                      type="number"
-                      value={tier.price}
-                      onChange={(e) =>
-                        handlePriceTierChange(index, "price", e.target.value)
-                      }
-                      min="0"
-                      step="0.01"
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors[`tier${index}Price`]
-                          ? "border-red-500"
-                          : "border-slate-300"
-                      }`}
-                      placeholder="50.00"
-                    />
-                    {errors[`tier${index}Price`] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[`tier${index}Price`]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Seats
-                    </label>
-                    <input
-                      type="number"
-                      value={tier.seats}
-                      onChange={(e) =>
-                        handlePriceTierChange(index, "seats", e.target.value)
-                      }
-                      min="1"
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors[`tier${index}Seats`]
-                          ? "border-red-500"
-                          : "border-slate-300"
-                      }`}
-                      placeholder="50"
-                    />
-                    {errors[`tier${index}Seats`] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[`tier${index}Seats`]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex items-end">
-                    {formData.priceTiers.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removePriceTier(index)}
-                        className="w-full bg-red-100 text-red-600 py-2 px-3 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Actions */}

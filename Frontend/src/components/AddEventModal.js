@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -9,7 +9,7 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
     venue: "",
     category: "",
     totalSeats: "",
-    priceTiers: [{ name: "General", price: "", seats: "" }],
+    image: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -23,15 +23,18 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
     "Education",
     "Health",
     "Food",
+    "Others",
   ];
 
+  const fileInputRef = useRef(null);
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, files } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === "file" ? files[0] : value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -40,35 +43,8 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
-  const handlePriceTierChange = (index, field, value) => {
-    const newPriceTiers = [...formData.priceTiers];
-    newPriceTiers[index][field] = value;
-    setFormData((prev) => ({
-      ...prev,
-      priceTiers: newPriceTiers,
-    }));
-  };
-
-  const addPriceTier = () => {
-    setFormData((prev) => ({
-      ...prev,
-      priceTiers: [...prev.priceTiers, { name: "", price: "", seats: "" }],
-    }));
-  };
-
-  const removePriceTier = (index) => {
-    if (formData.priceTiers.length > 1) {
-      const newPriceTiers = formData.priceTiers.filter((_, i) => i !== index);
-      setFormData((prev) => ({
-        ...prev,
-        priceTiers: newPriceTiers,
-      }));
-    }
-  };
-
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = "Event name is required";
     if (!formData.description.trim())
       newErrors.description = "Description is required";
@@ -78,17 +54,6 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
     if (!formData.category) newErrors.category = "Category is required";
     if (!formData.totalSeats || formData.totalSeats <= 0)
       newErrors.totalSeats = "Total seats must be greater than 0";
-
-    // Validate price tiers
-    formData.priceTiers.forEach((tier, index) => {
-      if (!tier.name.trim())
-        newErrors[`tier${index}Name`] = "Tier name is required";
-      if (!tier.price || tier.price <= 0)
-        newErrors[`tier${index}Price`] = "Price must be greater than 0";
-      if (!tier.seats || tier.seats <= 0)
-        newErrors[`tier${index}Seats`] = "Seats must be greater than 0";
-    });
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -109,9 +74,15 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
       venue: "",
       category: "",
       totalSeats: "",
-      priceTiers: [{ name: "General", price: "", seats: "" }],
+      image: null,
     });
     setErrors({});
+  };
+
+  const handleRemoveImage = () => {
+    setFormData((prev) => ({ ...prev, image: null }));
+    setFileInputKey(Date.now());
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   if (!isOpen) return null;
@@ -194,6 +165,55 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
             </div>
           </div>
 
+          {/* Image Upload */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Event Image
+            </label>
+            {!formData.image && (
+              <input
+                key={fileInputKey}
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 border-slate-300"
+                ref={fileInputRef}
+              />
+            )}
+            {formData.image && (
+              <div className="relative inline-block">
+                <img
+                  src={URL.createObjectURL(formData.image)}
+                  alt="Preview"
+                  className="mt-2 rounded-lg max-h-32 object-contain border"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1 left-1 bg-white bg-opacity-80 rounded-full p-1 shadow hover:bg-red-100 text-slate-500 hover:text-red-600"
+                  style={{ lineHeight: 0 }}
+                  onClick={handleRemoveImage}
+                  aria-label="Remove image"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Description *
@@ -202,11 +222,11 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              rows={3}
               className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 errors.description ? "border-red-500" : "border-slate-300"
               }`}
               placeholder="Describe your event"
+              rows={3}
             />
             {errors.description && (
               <p className="text-red-500 text-xs mt-1">{errors.description}</p>
@@ -226,12 +246,12 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   errors.date ? "border-red-500" : "border-slate-300"
                 }`}
+                placeholder="dd-mm-yyyy"
               />
               {errors.date && (
                 <p className="text-red-500 text-xs mt-1">{errors.date}</p>
               )}
             </div>
-
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Time *
@@ -244,12 +264,12 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   errors.time ? "border-red-500" : "border-slate-300"
                 }`}
+                placeholder="--:--"
               />
               {errors.time && (
                 <p className="text-red-500 text-xs mt-1">{errors.time}</p>
               )}
             </div>
-
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 Total Seats *
@@ -259,11 +279,11 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
                 name="totalSeats"
                 value={formData.totalSeats}
                 onChange={handleInputChange}
-                min="1"
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   errors.totalSeats ? "border-red-500" : "border-slate-300"
                 }`}
                 placeholder="100"
+                min={1}
               />
               {errors.totalSeats && (
                 <p className="text-red-500 text-xs mt-1">{errors.totalSeats}</p>
@@ -288,118 +308,6 @@ const AddEventModal = ({ isOpen, onClose, onSubmit }) => {
             {errors.venue && (
               <p className="text-red-500 text-xs mt-1">{errors.venue}</p>
             )}
-          </div>
-
-          {/* Price Tiers */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-medium text-slate-700">
-                Price Tiers
-              </label>
-              <button
-                type="button"
-                onClick={addPriceTier}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-              >
-                + Add Tier
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {formData.priceTiers.map((tier, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-lg"
-                >
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Tier Name
-                    </label>
-                    <input
-                      type="text"
-                      value={tier.name}
-                      onChange={(e) =>
-                        handlePriceTierChange(index, "name", e.target.value)
-                      }
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors[`tier${index}Name`]
-                          ? "border-red-500"
-                          : "border-slate-300"
-                      }`}
-                      placeholder="e.g., VIP"
-                    />
-                    {errors[`tier${index}Name`] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[`tier${index}Name`]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Price ($)
-                    </label>
-                    <input
-                      type="number"
-                      value={tier.price}
-                      onChange={(e) =>
-                        handlePriceTierChange(index, "price", e.target.value)
-                      }
-                      min="0"
-                      step="0.01"
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors[`tier${index}Price`]
-                          ? "border-red-500"
-                          : "border-slate-300"
-                      }`}
-                      placeholder="50.00"
-                    />
-                    {errors[`tier${index}Price`] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[`tier${index}Price`]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                      Seats
-                    </label>
-                    <input
-                      type="number"
-                      value={tier.seats}
-                      onChange={(e) =>
-                        handlePriceTierChange(index, "seats", e.target.value)
-                      }
-                      min="1"
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        errors[`tier${index}Seats`]
-                          ? "border-red-500"
-                          : "border-slate-300"
-                      }`}
-                      placeholder="50"
-                    />
-                    {errors[`tier${index}Seats`] && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors[`tier${index}Seats`]}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex items-end">
-                    {formData.priceTiers.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removePriceTier(index)}
-                        className="w-full bg-red-100 text-red-600 py-2 px-3 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium"
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Actions */}
