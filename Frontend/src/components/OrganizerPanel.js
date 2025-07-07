@@ -83,18 +83,18 @@ const OrganizerPanel = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 max-w-7xl mx-auto w-full">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 gap-2 sm:gap-0">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
             Event Management
           </h1>
-          <p className="text-slate-600">Create and manage your events</p>
+          <p className="text-slate-600 text-sm sm:text-base">Create and manage your events</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="mt-4 sm:mt-0 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center space-x-2"
+          className="mt-2 sm:mt-0 bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center space-x-2 text-xs sm:text-sm"
         >
           <span>+</span>
           <span>Add Event</span>
@@ -102,55 +102,55 @@ const OrganizerPanel = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-sm border border-slate-200 p-6"
+            className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 min-w-0"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 mb-1">
+                <p className="text-xs sm:text-sm font-medium text-slate-600 mb-1">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold text-slate-800">
+                <p className="text-xl sm:text-2xl font-bold text-slate-800">
                   {stat.value}
                 </p>
               </div>
-              <div className="text-3xl">{stat.icon}</div>
+              <div className="text-2xl sm:text-3xl">{stat.icon}</div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Events Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200">
-          <h2 className="text-xl font-semibold text-slate-800">Your Events</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-800">Your Events</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[600px] text-xs sm:text-sm">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Event
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Date & Time
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Venue
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Attendees
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Revenue
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                <th className="px-4 sm:px-6 py-2 sm:py-3 text-left font-medium text-slate-500 uppercase tracking-wider whitespace-nowrap">
                   Actions
                 </th>
               </tr>
@@ -161,24 +161,24 @@ const OrganizerPanel = () => {
                   key={event.id}
                   className="hover:bg-slate-50 transition-colors"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-slate-800">
+                      <div className="font-medium text-slate-800">
                         {event.name}
                       </div>
-                      <div className="text-sm text-slate-500">
+                      <div className="text-slate-500">
                         {event.category}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-slate-800">{event.date}</div>
-                    <div className="text-sm text-slate-500">{event.time}</div>
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap">
+                    <div className="text-slate-800">{event.date}</div>
+                    <div className="text-slate-500">{event.time}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap text-slate-800">
                     {event.venue}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
                         event.status
@@ -187,23 +187,23 @@ const OrganizerPanel = () => {
                       {event.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap text-slate-800">
                     {event.attendees}/{event.capacity}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-800">
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap font-medium text-slate-800">
                     {event.revenue}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <td className="px-4 sm:px-6 py-3 whitespace-nowrap font-medium">
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleEditEvent(event)}
-                        className="text-blue-600 hover:text-blue-900 transition-colors"
+                        className="text-blue-600 hover:text-blue-900 transition-colors text-xs sm:text-sm"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeleteEvent(event)}
-                        className="text-red-600 hover:text-red-900 transition-colors"
+                        className="text-red-600 hover:text-red-900 transition-colors text-xs sm:text-sm"
                       >
                         Delete
                       </button>

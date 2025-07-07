@@ -102,23 +102,23 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 max-w-7xl mx-auto w-full">
       {/* Page Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
           Discover Events
         </h1>
-        <p className="text-slate-600">
+        <p className="text-slate-600 text-sm sm:text-base">
           Browse upcoming events and manage your tickets
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-slate-200">
-        <nav className="-mb-px flex space-x-8">
+      <div className="border-b border-slate-200 overflow-x-auto">
+        <nav className="-mb-px flex space-x-4 sm:space-x-8 min-w-max">
           <button
             onClick={() => setActiveTab("browse")}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-2 sm:px-4 border-b-2 font-medium text-xs sm:text-sm ${
               activeTab === "browse"
                 ? "border-blue-500 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
@@ -128,7 +128,7 @@ const UserDashboard = () => {
           </button>
           <button
             onClick={() => setActiveTab("tickets")}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+            className={`py-2 px-2 sm:px-4 border-b-2 font-medium text-xs sm:text-sm ${
               activeTab === "tickets"
                 ? "border-blue-500 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
@@ -143,11 +143,11 @@ const UserDashboard = () => {
       {activeTab === "browse" && (
         <div className="space-y-6">
           {/* Categories Filter */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 overflow-x-auto pb-2">
             {categories.map((category) => (
               <button
                 key={category}
-                className="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-700 transition-colors text-sm font-medium"
+                className="px-3 sm:px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-700 transition-colors text-xs sm:text-sm font-medium whitespace-nowrap"
               >
                 {category}
               </button>
@@ -155,48 +155,48 @@ const UserDashboard = () => {
           </div>
 
           {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {events.map((event) => (
               <div
                 key={event.id}
-                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow min-w-0"
               >
-                <div className="h-48 bg-slate-200 relative">
+                <div className="h-40 sm:h-48 bg-slate-200 relative">
                   <img
                     src={event.image}
                     alt={event.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
                     <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
                       {event.category}
                     </span>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1 sm:mb-2">
                     {event.name}
                   </h3>
-                  <p className="text-slate-600 text-sm mb-4 line-clamp-2">
+                  <p className="text-slate-600 text-xs sm:text-sm mb-2 sm:mb-4 line-clamp-2">
                     {event.description}
                   </p>
 
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-sm text-slate-600">
+                  <div className="space-y-1 sm:space-y-2 mb-2 sm:mb-4">
+                    <div className="flex items-center text-xs sm:text-sm text-slate-600">
                       <span className="mr-2">📅</span>
                       {event.date} at {event.time}
                     </div>
-                    <div className="flex items-center text-sm text-slate-600">
+                    <div className="flex items-center text-xs sm:text-sm text-slate-600">
                       <span className="mr-2">📍</span>
                       {event.venue}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-slate-800">
+                    <span className="text-lg sm:text-xl font-bold text-slate-800">
                       {event.price}
                     </span>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                    <button className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm font-medium">
                       Book Now
                     </button>
                   </div>
@@ -211,28 +211,28 @@ const UserDashboard = () => {
       {activeTab === "tickets" && (
         <div className="space-y-6">
           {tickets.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">🎫</div>
-              <h3 className="text-lg font-medium text-slate-800 mb-2">
+            <div className="text-center py-8 sm:py-12">
+              <div className="text-4xl sm:text-6xl mb-2 sm:mb-4">🎫</div>
+              <h3 className="text-base sm:text-lg font-medium text-slate-800 mb-1 sm:mb-2">
                 No tickets yet
               </h3>
-              <p className="text-slate-600">
+              <p className="text-slate-600 text-xs sm:text-sm">
                 Start browsing events to book your first ticket!
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {tickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="bg-white rounded-xl shadow-sm border border-slate-200 p-6"
+                  className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6"
                 >
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 sm:mb-4 gap-2 sm:gap-0">
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-800 mb-1">
+                      <h3 className="text-base sm:text-lg font-semibold text-slate-800 mb-1">
                         {ticket.eventName}
                       </h3>
-                      <p className="text-sm text-slate-600">{ticket.date}</p>
+                      <p className="text-xs sm:text-sm text-slate-600">{ticket.date}</p>
                     </div>
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
@@ -243,33 +243,27 @@ const UserDashboard = () => {
                     </span>
                   </div>
 
-                  <div className="space-y-3 mb-4">
-                    <div className="flex justify-between text-sm">
+                  <div className="space-y-2 sm:space-y-3 mb-2 sm:mb-4">
+                    <div className="flex justify-between text-xs sm:text-sm">
                       <span className="text-slate-600">Ticket Type:</span>
                       <span className="font-medium text-slate-800">
                         {ticket.ticketType}
                       </span>
                     </div>
-                    <div className="flex justify-between text-sm">
+                    <div className="flex justify-between text-xs sm:text-sm">
                       <span className="text-slate-600">Price:</span>
                       <span className="font-medium text-slate-800">
                         {ticket.price}
                       </span>
                     </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-slate-600">QR Code:</span>
-                      <span className="font-mono text-slate-800">
-                        {ticket.qrCode}
-                      </span>
-                    </div>
                   </div>
 
-                  <div className="flex space-x-3">
-                    <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-                      View Details
-                    </button>
-                    <button className="flex-1 bg-slate-100 text-slate-700 py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors text-sm font-medium">
-                      Download
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <span className="text-xs sm:text-sm text-slate-500">
+                      QR: {ticket.qrCode}
+                    </span>
+                    <button className="bg-slate-100 text-slate-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-slate-200 transition-colors text-xs sm:text-sm font-medium">
+                      View Ticket
                     </button>
                   </div>
                 </div>

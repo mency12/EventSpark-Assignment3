@@ -55,35 +55,37 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32 max-w-7xl mx-auto w-full">
       {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-2">
-          Admin Dashboard
-        </h1>
-        <p className="text-slate-600">
-          Monitor your platform's performance and user activity
-        </p>
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-1 sm:mb-2">
+            Admin Dashboard
+          </h1>
+          <p className="text-slate-600 text-sm sm:text-base">
+            Monitor your platform's performance and user activity
+          </p>
+        </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow"
+            className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 hover:shadow-md transition-shadow min-w-0"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600 mb-1">
+                <p className="text-xs sm:text-sm font-medium text-slate-600 mb-1">
                   {stat.title}
                 </p>
-                <p className="text-2xl font-bold text-slate-800">
+                <p className="text-xl sm:text-2xl font-bold text-slate-800">
                   {stat.value}
                 </p>
                 <div className="flex items-center mt-2">
                   <span
-                    className={`text-sm font-medium ${
+                    className={`text-xs sm:text-sm font-medium ${
                       stat.changeType === "positive"
                         ? "text-green-600"
                         : "text-red-600"
@@ -91,33 +93,33 @@ const AdminDashboard = () => {
                   >
                     {stat.change}
                   </span>
-                  <span className="text-sm text-slate-500 ml-1">
+                  <span className="text-xs sm:text-sm text-slate-500 ml-1">
                     from last month
                   </span>
                 </div>
               </div>
-              <div className="text-3xl">{stat.icon}</div>
+              <div className="text-2xl sm:text-3xl">{stat.icon}</div>
             </div>
           </div>
         ))}
       </div>
 
       {/* Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Recent Activity */}
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-xl font-semibold text-slate-800 mb-4">
+        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-3 sm:mb-4">
             Recent Activity
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {recentActivities.map((activity) => (
               <div
                 key={activity.id}
-                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-slate-50 transition-colors"
+                className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 p-2 sm:p-3 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-800">
+                  <p className="text-xs sm:text-sm font-medium text-slate-800">
                     {activity.action}
                   </p>
                   <p className="text-xs text-slate-500">{activity.user}</p>
@@ -129,24 +131,22 @@ const AdminDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-xl font-semibold text-slate-800 mb-4">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 flex flex-col gap-2 sm:gap-3">
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2 sm:mb-4">
             Quick Actions
           </h2>
-          <div className="space-y-3">
-            <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-              View All Users
-            </button>
-            <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium">
-              Approve Events
-            </button>
-            <button className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
-              Generate Reports
-            </button>
-            <button className="w-full bg-slate-100 text-slate-700 py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors text-sm font-medium">
-              System Settings
-            </button>
-          </div>
+          <button className="w-full bg-blue-600 text-white py-2 px-2 sm:px-4 rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm font-medium">
+            View All Users
+          </button>
+          <button className="w-full bg-green-600 text-white py-2 px-2 sm:px-4 rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm font-medium">
+            Approve Events
+          </button>
+          <button className="w-full bg-purple-600 text-white py-2 px-2 sm:px-4 rounded-lg hover:bg-purple-700 transition-colors text-xs sm:text-sm font-medium">
+            Generate Reports
+          </button>
+          <button className="w-full bg-slate-100 text-slate-700 py-2 px-2 sm:px-4 rounded-lg hover:bg-slate-200 transition-colors text-xs sm:text-sm font-medium">
+            System Settings
+          </button>
         </div>
       </div>
     </div>

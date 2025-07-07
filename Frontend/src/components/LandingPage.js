@@ -36,16 +36,16 @@ const LandingPage = ({ userRole = "user", userName = "User", onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      <header className="bg-white shadow-sm border-b border-slate-200 w-full">
+        <div className="w-full md:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center h-auto sm:h-16 py-2 sm:py-0 gap-2 sm:gap-0">
             <div className="flex items-center space-x-3">
               <Logo size={40} />
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm text-slate-600">Welcome back,</p>
+            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+              <div className="text-center sm:text-right">
+                <p className="text-xs sm:text-sm text-slate-600">Welcome back,</p>
                 <p className="text-sm font-medium text-slate-800">{userName}</p>
               </div>
               <div className="flex items-center space-x-2 px-3 py-1 bg-slate-100 rounded-full">
@@ -57,7 +57,7 @@ const LandingPage = ({ userRole = "user", userName = "User", onLogout }) => {
               {/* Logout Button */}
               <button
                 onClick={onLogout}
-                className="ml-4 px-4 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs font-medium"
+                className="ml-0 sm:ml-4 px-3 sm:px-4 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs font-medium w-full sm:w-auto"
               >
                 Log Out
               </button>
@@ -67,7 +67,7 @@ const LandingPage = ({ userRole = "user", userName = "User", onLogout }) => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="w-full md:max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-8">
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
