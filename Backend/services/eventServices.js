@@ -1,4 +1,3 @@
-// services/eventService.js
 const Event = require('../models/Events');
 
 /* ─────────────  CREATE  ─────────────────────────────────────── */
@@ -78,3 +77,5 @@ exports.deleteEvent = async (req, res, next) => {
         res.json({ success: true, message: 'Event deleted' });
     } catch (err) { next(err); }
 };
+
+
