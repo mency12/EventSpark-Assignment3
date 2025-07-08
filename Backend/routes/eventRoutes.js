@@ -7,7 +7,7 @@ const {
     getEventById,
     updateEvent,
     deleteEvent
-} = require('../services/eventService');
+} = require('../services/eventServices');
 
 // POST /api/events
 router.post('/', verifyToken, createEvent);
