@@ -3,7 +3,7 @@ const router  = express.Router();
 const { verifyToken } = require('../middleware/auth');
 const {
     createEvent,
-    getAllEvents,
+    getEvents,
     getEventById,
     updateEvent,
     deleteEvent
@@ -13,7 +13,7 @@ const {
 router.post('/', verifyToken, createEvent);
 
 // GET /api/events
-router.get('/', verifyToken, getAllEvents);
+router.get('/', verifyToken, getEvents);
 
 // GET /api/events/:id
 router.get('/:id', verifyToken, getEventById);
