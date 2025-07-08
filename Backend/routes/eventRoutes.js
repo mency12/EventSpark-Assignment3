@@ -1,17 +1,27 @@
-const express  = require('express');
-const router   = express.Router();
-const auth     = require('../middleware/auth');
+const express = require('express');
+const router  = express.Router();
+const { verifyToken } = require('../middleware/auth');
 const {
     createEvent,
-    getEvents,
+    getAllEvents,
     getEventById,
     updateEvent,
     deleteEvent
 } = require('../services/eventService');
 
-router.post  ('/events',     auth,                  createEvent);
-router.get ('/events',       auth,                       getEvents);
-router.get   ('/events/:id',   auth, getEventById);
-router.put   ('/events/:id', auth,                  updateEvent);
-router.delete('/events/:id', auth,                       deleteEvent);
+// POST /api/events
+router.post('/', verifyToken, createEvent);
+
+// GET /api/events
+router.get('/', verifyToken, getAllEvents);
+
+// GET /api/events/:id
+router.get('/:id', verifyToken, getEventById);
+
+// PUT /api/events/:id
+router.put('/:id', verifyToken, updateEvent);
+
+// DELETE /api/events/:id
+router.delete('/:id', verifyToken, deleteEvent);
+
 module.exports = router;
