@@ -1,7 +1,7 @@
 const Event = require('../models/Events');
 
 /* ─────────────  CREATE  ─────────────────────────────────────── */
-exports.createEvent = async (req, res, next) => {
+const createEvent = async (req, res, next) => {
     try {
         const event = await Event.create({
             ...req.body,
@@ -12,7 +12,7 @@ exports.createEvent = async (req, res, next) => {
 };
 
 /* ─────────────  READ — list  ────────────────────────────────── */
-exports.getEvents = async (req, res, next) => {
+const getEvents = async (req, res, next) => {
     try {
         const { category, search, date } = req.query;
         const q = {};
@@ -33,7 +33,7 @@ exports.getEvents = async (req, res, next) => {
 };
 
 /* ─────────────  READ — single  ──────────────────────────────── */
-exports.getEventById = async (req, res, next) => {
+const getEventById = async (req, res, next) => {
     try {
         const event = await Event
             .findById(req.params.id)
@@ -47,7 +47,7 @@ exports.getEventById = async (req, res, next) => {
 };
 
 /* ─────────────  UPDATE  ─────────────────────────────────────── */
-exports.updateEvent = async (req, res, next) => {
+const updateEvent = async (req, res, next) => {
     try {
         const event = await Event.findById(req.params.id);
         if (!event)
@@ -64,7 +64,7 @@ exports.updateEvent = async (req, res, next) => {
 };
 
 /* ─────────────  DELETE  ─────────────────────────────────────── */
-exports.deleteEvent = async (req, res, next) => {
+const deleteEvent = async (req, res, next) => {
     try {
         const event = await Event.findById(req.params.id);
         if (!event)
@@ -76,6 +76,15 @@ exports.deleteEvent = async (req, res, next) => {
         await event.deleteOne();
         res.json({ success: true, message: 'Event deleted' });
     } catch (err) { next(err); }
+};
+
+// Export all functions in a single object at the end
+module.exports = {
+    createEvent,
+    getEvents,
+    getEventById,
+    updateEvent,
+    deleteEvent
 };
 
 
