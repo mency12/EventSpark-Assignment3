@@ -1,7 +1,7 @@
-const Event = require('../models/Events');
+const Event = require('../models/Event');
 
 /* ─────────────  CREATE  ─────────────────────────────────────── */
-const createEvent = async (req, res, next) => {
+exports.createEvent = async (req, res, next) => {
     try {
         const event = await Event.create({
             ...req.body,
@@ -12,7 +12,7 @@ const createEvent = async (req, res, next) => {
 };
 
 /* ─────────────  READ — list  ────────────────────────────────── */
-const getEvents = async (req, res, next) => {
+exports.getEvents = async (req, res, next) => {
     try {
         const { category, search, date } = req.query;
         const q = {};
@@ -33,7 +33,7 @@ const getEvents = async (req, res, next) => {
 };
 
 /* ─────────────  READ — single  ──────────────────────────────── */
-const getEventById = async (req, res, next) => {
+exports.getEventById = async (req, res, next) => {
     try {
         const event = await Event
             .findById(req.params.id)
@@ -47,7 +47,7 @@ const getEventById = async (req, res, next) => {
 };
 
 /* ─────────────  UPDATE  ─────────────────────────────────────── */
-const updateEvent = async (req, res, next) => {
+exports.updateEvent = async (req, res, next) => {
     try {
         const event = await Event.findById(req.params.id);
         if (!event)
@@ -64,7 +64,7 @@ const updateEvent = async (req, res, next) => {
 };
 
 /* ─────────────  DELETE  ─────────────────────────────────────── */
-const deleteEvent = async (req, res, next) => {
+exports.deleteEvent = async (req, res, next) => {
     try {
         const event = await Event.findById(req.params.id);
         if (!event)
@@ -77,14 +77,3 @@ const deleteEvent = async (req, res, next) => {
         res.json({ success: true, message: 'Event deleted' });
     } catch (err) { next(err); }
 };
-
-// Export all functions in a single object at the end
-module.exports = {
-    createEvent,
-    getEvents,
-    getEventById,
-    updateEvent,
-    deleteEvent
-};
-
-
