@@ -10,18 +10,18 @@ const {
 } = require('../services/eventServices');
 
 // POST /api/events
-router.post('/', verifyToken, createEvent);
+router.post('/events', verifyToken, createEvent);
 
 // GET /api/events
-router.get('/', verifyToken, getEvents);
+router.get('/events', verifyToken, getEvents);
 
 // GET /api/events/:id
-router.get('/:id', verifyToken, getEventById);
+router.get('/events/:id', verifyToken, getEventById);
 
 // PUT /api/events/:id
-router.put('/:id', verifyToken, updateEvent);
+router.put('/events/:id', verifyToken, updateEvent);
 
 // DELETE /api/events/:id
-router.delete('/:id', verifyToken, deleteEvent);
+router.delete('/events/:id', verifyToken, deleteEvent);
 
 module.exports = router;
