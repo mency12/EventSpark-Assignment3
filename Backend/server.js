@@ -29,6 +29,7 @@ app.use(express.json());
 const allowedProd = [
   "https://event-spark-self.vercel.app",
   "https://event-spark-prod.vercel.app",
+  "https://event-spark-assignment3-bfa7.vercel.app"
 ];
 
 app.use(
